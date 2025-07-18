@@ -5,11 +5,11 @@ import 'package:spotify/common/widgets/button/basic_app_button.dart';
 import 'package:spotify/core/assets/app_vectors.dart';
 import 'package:spotify/core/theme/app_colors.dart';
 import 'package:spotify/data/models/auth/signin_user_req.dart';
-import 'package:spotify/domain/entities/usecases/auth/signin.dart';
 import 'package:spotify/presentation/auth/pages/signup.dart';
 
+import '../../../domain/usecases/auth/signin.dart' show SignInUseCase;
 import '../../../service_locator.dart';
-import '../../root/pages/root.dart';
+import '../../home/pages/home.dart';
 
 class SigninPage extends StatelessWidget {
   SigninPage({super.key});
@@ -18,19 +18,13 @@ class SigninPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
 
   Widget _registerText() {
-    return const Text(
-      'Sign In',
-      textAlign: TextAlign.center,
-      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-    );
+    return const Text('Sign In', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25));
   }
 
   Widget _emailField(BuildContext context) {
     return TextField(
       controller: _emailController,
-      decoration: const InputDecoration(
-        hintText: 'Enter Email',
-      ).applyDefaults(Theme.of(context).inputDecorationTheme),
+      decoration: const InputDecoration(hintText: 'Enter Email').applyDefaults(Theme.of(context).inputDecorationTheme),
     );
   }
 
@@ -38,9 +32,7 @@ class SigninPage extends StatelessWidget {
     return TextField(
       controller: _passwordController,
       obscureText: true,
-      decoration: const InputDecoration(
-        hintText: 'Password',
-      ).applyDefaults(Theme.of(context).inputDecorationTheme),
+      decoration: const InputDecoration(hintText: 'Password').applyDefaults(Theme.of(context).inputDecorationTheme),
     );
   }
 
@@ -52,11 +44,7 @@ class SigninPage extends StatelessWidget {
         children: [
           const Text('Not A Member? ', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
           TextButton(
-            onPressed:
-                () => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (BuildContext context) => SignupPage()),
-                ),
+            onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => SignupPage())),
             child: const Text('Register Now', style: TextStyle(color: AppColors.primary)),
           ),
         ],
@@ -82,10 +70,7 @@ class SigninPage extends StatelessWidget {
             BasicAppButton(
               onPressed: () async {
                 var result = await sl<SignInUseCase>().call(
-                  params: SigninUserReq(
-                    email: _emailController.text.toString().trim(),
-                    password: _passwordController.text.toString(),
-                  ),
+                  params: SigninUserReq(email: _emailController.text.toString().trim(), password: _passwordController.text.toString()),
                 );
                 result.fold(
                   (l) {
@@ -93,11 +78,7 @@ class SigninPage extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(snackbar);
                   },
                   (r) {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (BuildContext context) => const RootPage()),
-                      (route) => false,
-                    );
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const HomePage()), (route) => false);
                   },
                 );
               },

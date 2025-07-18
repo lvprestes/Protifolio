@@ -5,10 +5,11 @@ import 'package:spotify/common/widgets/button/basic_app_button.dart';
 import 'package:spotify/core/assets/app_vectors.dart';
 import 'package:spotify/core/theme/app_colors.dart';
 import 'package:spotify/data/models/auth/create_user_req.dart';
-import 'package:spotify/domain/entities/usecases/auth/signup.dart';
 import 'package:spotify/presentation/auth/pages/signin.dart';
-import 'package:spotify/presentation/root/pages/root.dart';
+import 'package:spotify/presentation/home/pages/home.dart';
 import 'package:spotify/service_locator.dart';
+
+import '../../../domain/usecases/auth/signup.dart';
 
 class SignupPage extends StatelessWidget {
   SignupPage({super.key});
@@ -18,37 +19,29 @@ class SignupPage extends StatelessWidget {
   final TextEditingController _password = TextEditingController();
 
   Widget _registerText() {
-    return const Text(
-      'Register',
-      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-      textAlign: TextAlign.center,
-    );
+    return const Text('Register', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25), textAlign: TextAlign.center);
   }
 
   Widget _fullNameField(BuildContext context) {
     return TextField(
       controller: _fullName,
-      decoration: const InputDecoration(
-        hintText: 'Full Name',
-      ).applyDefaults(Theme.of(context).inputDecorationTheme),
+      decoration: const InputDecoration(hintText: 'Full Name').applyDefaults(Theme.of(context).inputDecorationTheme),
     );
   }
 
   Widget _emailField(BuildContext context) {
     return TextField(
       controller: _email,
-      decoration: const InputDecoration(
-        hintText: 'Enter Email',
-      ).applyDefaults(Theme.of(context).inputDecorationTheme),
+      keyboardType: TextInputType.emailAddress, // teclado otimizado para email
+      decoration: const InputDecoration(hintText: 'Enter Email').applyDefaults(Theme.of(context).inputDecorationTheme),
     );
   }
 
   Widget _passwordField(BuildContext context) {
     return TextField(
       controller: _password,
-      decoration: const InputDecoration(
-        hintText: 'Password',
-      ).applyDefaults(Theme.of(context).inputDecorationTheme),
+      obscureText: true, // oculta os caracteres digitados
+      decoration: const InputDecoration(hintText: 'Password').applyDefaults(Theme.of(context).inputDecorationTheme),
     );
   }
 
@@ -58,16 +51,10 @@ class SignupPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
-            'Do you have an account? ',
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
-          ),
+          const Text('Do you have an account? ', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
           TextButton(
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (BuildContext context) => SigninPage()),
-              );
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => SigninPage()));
             },
             child: const Text('Sign In', style: TextStyle(color: AppColors.primary)),
           ),
@@ -97,11 +84,7 @@ class SignupPage extends StatelessWidget {
             BasicAppButton(
               onPressed: () async {
                 var result = await sl<SignUpUseCase>().call(
-                  params: CreateUserReq(
-                    fullName: _fullName.text.toString(),
-                    email: _email.text.toString(),
-                    password: _password.text.toString(),
-                  ),
+                  params: CreateUserReq(fullName: _fullName.text.toString(), email: _email.text.toString(), password: _password.text.toString()),
                 );
                 result.fold(
                   (l) {
@@ -109,11 +92,7 @@ class SignupPage extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(snackbar);
                   },
                   (r) {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (BuildContext context) => const RootPage()),
-                      (route) => false,
-                    );
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const HomePage()), (route) => false);
                   },
                 );
               },
