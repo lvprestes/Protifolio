@@ -3,9 +3,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:spotify/common/helpers/is_dark_mode.dart';
 import 'package:spotify/common/widgets/appbar/app_bar.dart';
 import 'package:spotify/common/widgets/button/basic_app_button.dart';
-import 'package:spotify/core/assets/app_images.dart';
-import 'package:spotify/core/assets/app_vectors.dart';
-import 'package:spotify/core/theme/app_colors.dart';
+import 'package:spotify/core/configs/assets/app_images.dart';
+import 'package:spotify/core/configs/assets/app_vectors.dart';
+import 'package:spotify/core/configs/theme/app_colors.dart';
 import 'package:spotify/presentation/auth/pages/signin.dart';
 import 'package:spotify/presentation/auth/pages/signup.dart';
 
@@ -31,10 +31,7 @@ class SignUpOrSignIn extends StatelessWidget {
                 children: [
                   SvgPicture.asset(AppVectors.logo),
                   const SizedBox(height: 55),
-                  const Text(
-                    'Enjoy Listening To Music',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
+                  const Text('Enjoy Listening To Music', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   const SizedBox(height: 21),
                   const Text(
                     'Spotify is a proprietary Swedish audio srteaming and media services provider',
@@ -47,11 +44,7 @@ class SignUpOrSignIn extends StatelessWidget {
                       Expanded(
                         flex: 1,
                         child: BasicAppButton(
-                          onPressed:
-                              () => Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (BuildContext context) => SignupPage()),
-                              ),
+                          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SignupPage())),
                           title: 'Register',
                         ),
                       ),
@@ -59,19 +52,11 @@ class SignUpOrSignIn extends StatelessWidget {
                       Expanded(
                         flex: 1,
                         child: TextButton(
-                          onPressed:
-                              () => Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (BuildContext context) => SigninPage()),
-                              ),
+                          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SigninPage())),
                           style: TextButton.styleFrom(minimumSize: const Size.fromHeight(80)),
                           child: Text(
                             'Sign In',
-                            style: TextStyle(
-                              color: context.isDarkMode ? Colors.white : Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
+                            style: TextStyle(color: context.isDarkMode ? Colors.white : Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                         ),
                       ),

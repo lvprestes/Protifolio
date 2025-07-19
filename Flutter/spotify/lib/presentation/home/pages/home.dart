@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:spotify/common/helpers/is_dark_mode.dart';
-import 'package:spotify/core/assets/app_images.dart';
-import 'package:spotify/core/theme/app_colors.dart';
+import 'package:spotify/core/configs/assets/app_images.dart';
+import 'package:spotify/core/configs/theme/app_colors.dart';
+import 'package:spotify/presentation/home/widgets/news_songs.dart';
 
 import '../../../common/widgets/appbar/app_bar.dart';
-import '../../../core/assets/app_vectors.dart';
+import '../../../core/configs/assets/app_vectors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,6 +17,32 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: BasicAppbar(hideBack: true, title: SvgPicture.asset(AppVectors.logo, height: 40, width: 40)),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _homeTopCard(context),
+            _tabs(context),
+            SizedBox(
+              height: 260,
+              child: TabBarView(controller: _tabController, children: [const NewsSongs(), Container(), Container(), Container()]),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _homeTopCard(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -46,7 +73,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
     return TabBar(
       controller: _tabController,
-      isScrollable: !isTablet, // Tabs fixas se tiver espaço suficiente
+      isScrollable: !isTablet,
       labelColor: context.isDarkMode ? Colors.white : Colors.black,
       indicatorColor: AppColors.primary,
       padding: EdgeInsets.symmetric(vertical: isTablet ? 48 : 40, horizontal: isTablet ? 32 : 16),
@@ -57,20 +84,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         Text('Artists', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
         Text('Podcasts', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
       ],
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 4, vsync: this);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: BasicAppbar(hideBack: true, title: SvgPicture.asset(AppVectors.logo, height: 40, width: 40)),
-      body: SingleChildScrollView(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [_homeTopCard(context), _tabs(context)])),
     );
   }
 }
